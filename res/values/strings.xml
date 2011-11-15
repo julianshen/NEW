@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hello">Hello World, NEWTestActivity!</string>
+    <string name="app_name">NEW</string>
+    <string name="enable">Enable</string>
+    <string name="disable">Disable</string>
+
+</resources>

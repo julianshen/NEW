@@ -36,7 +36,7 @@ public class NEWService extends Service {
 	@Override
 	public void onStart(Intent intent, int startId) {
 		super.onStart(intent, startId);
-		mTinyServer = new TinyWebServer(6666);
+		mTinyServer = new TinyWebServer(6111);
         mTinyServer.regiesterHandler("/", new HomeRequestHandler());
         mTinyServer.regiesterHandler("/voice", new VoiceHandler(this));
         mTinyServer.regiesterHandler("/echo", new JsEchoHandler());

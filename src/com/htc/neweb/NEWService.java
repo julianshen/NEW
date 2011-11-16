@@ -5,6 +5,7 @@ import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.nio.charset.Charset;
 import java.util.Enumeration;
+import java.util.regex.Pattern;
 
 import android.app.Service;
 import android.content.Intent;
@@ -12,6 +13,7 @@ import android.os.IBinder;
 import android.util.Log;
 
 import com.htc.neweb.server.TinyWebServer;
+import com.htc.neweb.server.reqhandler.AssetFilesHandler;
 import com.htc.neweb.server.reqhandler.HomeRequestHandler;
 import com.htc.neweb.server.reqhandler.JsEchoHandler;
 import com.htc.neweb.server.reqhandler.VoiceHandler;
@@ -34,10 +36,12 @@ public class NEWService extends Service {
 	@Override
 	public void onStart(Intent intent, int startId) {
 		super.onStart(intent, startId);
-		mTinyServer = new TinyWebServer(6110);
+		mTinyServer = new TinyWebServer(6666);
         mTinyServer.regiesterHandler("/", new HomeRequestHandler());
         mTinyServer.regiesterHandler("/voice", new VoiceHandler(this));
         mTinyServer.regiesterHandler("/echo", new JsEchoHandler());
+        String filePrefix = "/web/";
+        mTinyServer.regiesterHandler(Pattern.compile(filePrefix + ".+"), new AssetFilesHandler(this, filePrefix));
         
         Enumeration<NetworkInterface> e;
 		try {

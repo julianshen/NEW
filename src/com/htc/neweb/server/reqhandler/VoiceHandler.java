@@ -54,10 +54,13 @@ public class VoiceHandler implements RequestHandler {
 			e1.printStackTrace();
 		}
 		
+		
+		
 		PrintWriter writer = null;
 		try {
+			resp.setContentType("application/json");
 			writer = resp.getWriter();
-			writer.println("<h1>"+result+"</h1>");
+			writer.print("{\"message\": \"" +result+ "\"}");
 			Log.d("AAAA", "Result:"+result);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

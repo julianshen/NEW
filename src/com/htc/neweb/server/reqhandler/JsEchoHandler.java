@@ -20,12 +20,12 @@ public class JsEchoHandler implements RequestHandler {
 			message = queryString; //I'm lazy
 		}
 		
-		resp.setContentType("application/json");
+		resp.setContentType("text/json");
 		
 		PrintWriter writer;
 		try {
 			writer = resp.getWriter();
-			writer.println("{msg:'" +message+ "'}");
+			writer.print("{\"message\": \"" +message+ "\"}");
 			writer.flush();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

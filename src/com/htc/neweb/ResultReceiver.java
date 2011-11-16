@@ -48,8 +48,8 @@ public class ResultReceiver extends BroadcastReceiver {
 			Intent resultIntent = new Intent("com.htc.new.result");
 			resultIntent.putExtra("callbackid", id);
 			intent.putExtra("result", resultIntent);
-			
-			context.startActivity(intent);
+			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			context.getApplicationContext().startActivity(intent);
 		}
 		
 		public void onResult(long callbackid, Intent intent) {

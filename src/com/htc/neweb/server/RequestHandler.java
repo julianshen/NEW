@@ -2,5 +2,5 @@ package com.htc.neweb.server;
 
 public interface RequestHandler {
 
-	public HttpResponse process(HttpRequest req);
+	public void doGet(HttpRequest req, HttpResponse resp);
 }

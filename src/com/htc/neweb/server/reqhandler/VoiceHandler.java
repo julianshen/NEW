@@ -1,8 +1,9 @@
 package com.htc.neweb.server.reqhandler;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.speech.RecognizerIntent;
@@ -17,7 +18,6 @@ public class VoiceHandler implements RequestHandler {
 
 	Context mContext;
 	ResultReceiver mResultReceiver = null;
-	private BroadcastReceiver mReceiver;
 	private Object lock = new Object();
 	String result = "test1";
 
@@ -28,9 +28,7 @@ public class VoiceHandler implements RequestHandler {
 	}
 
 	@Override
-	public HttpResponse process(HttpRequest req) {
-		HttpResponse resp = new HttpResponse();
-		
+	public void doGet(HttpRequest req, HttpResponse resp) {
 		Intent recoIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
 		recoIntent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, getClass()
 				.getPackage().getName());
@@ -56,13 +54,21 @@ public class VoiceHandler implements RequestHandler {
 			e1.printStackTrace();
 		}
 		
-		resp.content = result.getBytes();
+		PrintWriter writer = null;
 		try {
-			mContext.unregisterReceiver(mResultReceiver);
-		} catch(Exception e) {
+			writer = resp.getWriter();
+			writer.println("<h1>"+result+"</h1>");
+			Log.d("AAAA", "Result:"+result);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {
+			if (writer != null) {
+				writer.flush();
+				writer.close();
+			}
 		}
- 		return resp;
+		
 	}
 
 	

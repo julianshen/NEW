@@ -30,6 +30,11 @@
                 <action android:name="com.htc.new.result"/>
             </intent-filter>
         </receiver>
+        <service android:name="NEWService">
+            <intent-filter>
+                <action android:name="com.htc.tinyweb.service"/>
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

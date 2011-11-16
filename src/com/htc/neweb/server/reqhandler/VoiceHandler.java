@@ -3,6 +3,7 @@ package com.htc.neweb.server.reqhandler;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import android.content.Context;
 import android.content.Intent;
@@ -29,6 +30,28 @@ public class VoiceHandler implements RequestHandler {
 
 	@Override
 	public void doGet(HttpRequest req, HttpResponse resp) {
+		String uri = req.getUri();
+		
+		HashMap<String, String> params = new HashMap<String, String>();
+		if(uri.indexOf('?') > 0) {
+			String queryString = uri.substring(uri.indexOf('?') + 1);
+			
+			//parse queryString
+			String[] parts = queryString.split("&");
+			if(parts!=null) {
+				for(String p:parts) {
+					String[] namevaluepair = p.split("=");
+					
+					if(namevaluepair!=null && namevaluepair.length>0) {
+						String name = namevaluepair[0];
+						String value = namevaluepair.length > 1 ? namevaluepair[1]:"";
+						params.put(name, value);
+					}
+				}
+			}
+		}
+		
+		
 		Intent recoIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
 		recoIntent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, getClass()
 				.getPackage().getName());
@@ -59,8 +82,16 @@ public class VoiceHandler implements RequestHandler {
 		PrintWriter writer = null;
 		try {
 			resp.setContentType("application/json");
+			String callback = params.get("callback");
+			
+			String output = "{\"message\": \"" +result+ "\"}";
+			
+			if(callback!=null) {
+				//JSONP
+				output = callback + "(" + output + ");";
+			}
 			writer = resp.getWriter();
-			writer.print("{\"message\": \"" +result+ "\"}");
+			writer.print(output);
 			Log.d("AAAA", "Result:"+result);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

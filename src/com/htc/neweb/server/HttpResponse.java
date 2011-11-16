@@ -16,6 +16,7 @@ public class HttpResponse {
 	private HttpOutputStream mOut = null;
 	private OutputStream mOriginOut = null;
 	private String protocol = null;
+	private HashMap<String, String> headers = new HashMap<String, String>();
 
 	protected HttpResponse(OutputStream out) {
 		super();
@@ -80,6 +81,10 @@ public class HttpResponse {
 		ensureHeader();
 		content_type = type;
 	}
+	
+	public void setHeader(String name, String value) {
+		headers.put(name, value);
+	}
 
 	public boolean isCommitted() {
 		return mCommitted;
@@ -93,6 +98,12 @@ public class HttpResponse {
 		mOut.println(getProtocol() + " " + getStatus() + " "
 				+ HttpMessage.getMessage(getStatus()));
 		mOut.println("Content-Type: " + getContentType());
+		for(String headerName:headers.keySet()) {
+			String value = headers.get(headerName);
+			if(value!=null) {
+				mOut.println(headerName + ": " +value);
+			}
+		}
 
 		if (getContentLength() != -1) {
 			mOut.println("Content-Length: " + getContentLength());
